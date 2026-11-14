@@ -1,147 +1,241 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1b8a5a">
-<link rel="icon" type="image/png" href="https://dummyimage.com/192x192/1b8a5a/ffffff.png&text=V">
-<link rel="apple-touch-icon" href="https://dummyimage.com/192x192/1b8a5a/ffffff.png&text=V">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador Anti-Spam Villa Chichiriviche</title>
+  <title>Villa Chichiriviche - Respuestas</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="logo.png">
+  <meta name="theme-color" content="#0369a1">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
   <style>
+    :root {
+      --primary: #0369a1;
+      --primary-hover: #075985;
+      --secondary: #0d9488;
+      --bg: #f0f9ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f0f2f5; margin: 0; padding: 16px; display: flex; justify-content: center; }
-    .card { background: #ffffff; border-radius: 16px; padding: 20px; max-width: 480px; width: 100%; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-    h2 { font-size: 1.25rem; color: #1e293b; margin-top: 0; text-align: center; }
-    .preview { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; min-height: 160px; font-size: 0.95rem; line-height: 1.5; color: #334155; white-space: pre-wrap; margin-bottom: 16px; }
-    .btn-group { display: flex; gap: 10px; }
-    button { flex: 1; padding: 13px; font-size: 0.95rem; font-weight: 600; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; }
-    .btn-generate { background-color: #0284c7; color: white; }
-    .btn-generate:active { background-color: #0369a1; transform: scale(0.98); }
-    .btn-copy { background-color: #10b981; color: white; }
-    .btn-copy:active { background-color: #059669; transform: scale(0.98); }
-    .alert { text-align: center; font-size: 0.82rem; color: #64748b; margin-top: 10px; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: var(--card);
+      width: 100%;
+      max-width: 440px;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 1.35rem;
+      text-align: center;
+      margin: 0 0 16px 0;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px 8px;
+      border: none;
+      border-radius: 9px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .tab.active {
+      background: var(--card);
+      color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .output-box {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px;
+      min-height: 170px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      margin-bottom: 16px;
+      color: #334155;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+    button.action-btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    button.action-btn:active { transform: scale(0.98); }
+    .btn-gen { background: var(--primary); color: white; }
+    .btn-copy { background: var(--secondary); color: white; }
+    .status {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 12px;
+      min-height: 18px;
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>Generador de Respuestas</h2>
-  <div class="preview" id="output">Presiona "Generar versión" para crear un mensaje nuevo.</div>
-  
-  <div class="btn-group">
-    <button class="btn-generate" onclick="crearVariacion()">Generar versión</button>
-    <button class="btn-copy" onclick="copiarTexto()">Copiar texto</button>
+<div class="container">
+  <h1>Villa Chichiriviche</h1>
+
+  <div class="tabs">
+    <button class="tab active" id="tab1" onclick="cambiarModo(1)">1. Primer mensaje</button>
+    <button class="tab" id="tab2" onclick="cambiarModo(2)">2. Dar info y detalles</button>
   </div>
-  <div class="alert" id="status">Variaciones automáticas sin palabras bloqueadas ni símbolo $.</div>
+
+  <div id="badgeInfo" class="badge">Paso 1: Abre el chat sin activar filtros</div>
+
+  <div class="output-box" id="textoGenerado"></div>
+
+  <div class="actions">
+    <button class="action-btn btn-gen" onclick="generar()">Otra versión</button>
+    <button class="action-btn btn-copy" onclick="copiar()">Copiar texto</button>
+  </div>
+
+  <div class="status" id="statusMsg">Listo para usar</div>
 </div>
 
 <script>
-  const saludos = [
-    "¡Hola! Te comparto los detalles de la villa:",
-    "¡Buenas! Con gusto te paso la información de disponibilidad y comodidades:",
-    "¡Saludos! Claro que sí, aquí tienes lo que incluye la estadía:",
-    "¡Hola! Qué tal, un gusto saludarte. Estos son los datos de la propiedad:"
+  let modoActual = 1;
+  let ultimoIndice = -1;
+
+  // PASO 1: Primer contacto corto y humano
+  const mensajesPaso1 = [
+    "¡Hola! Qué gusto saludarte. Sí tenemos disponibilidad en Villa Chichiriviche. ¿Para qué fechas estás buscando y cuántas personas serían?",
+    "¡Buenas! Gracias por escribirnos. Claro que sí, contamos con estadía disponible en Villa Chichiriviche. ¿Qué días tienes pensado venir?",
+    "Hola, ¿cómo estás? Con mucho gusto te ayudo con tu viaje a Chichiriviche. Cuéntame para qué fecha buscas y cuántos huéspedes van.",
+    "¡Saludos! Sí tenemos opciones disponibles en la villa. ¿Para cuántas personas necesitas y en qué fecha vendrían?",
+    "Hola, gracias por contactarnos. Con gusto te paso todos los detalles de Villa Chichiriviche. Antes, dime para qué fecha te interesa consultar y cuántas personas van."
   ];
 
-  const ubicaciones = [
-    "Estamos a dos calles del malecón y una del centro.",
-    "Excelente ubicación: a 2 cuadras de la playa/malecón y a solo 1 cuadra de la zona central.",
-    "Ubicada a pasos de todo: 2 cuadras del malecón y 1 del casco central de Chichiriviche.",
-    "Punto céntrico: a 2 cuadras del malecón y a 1 cuadra del centro."
+  // PASO 2: Bloques dinámicos en párrafo natural (ajusta las tarifas o detalles exactos de Villa Chichiriviche aquí si lo necesitas)
+  const saludosP2 = [
+    "¡Perfecto! Te cuento cómo trabajamos en Villa Chichiriviche.",
+    "Con mucho gusto te detallo lo que ofrecemos en nuestra villa.",
+    "Aquí tienes la información completa de Villa Chichiriviche para tu estadía."
   ];
 
-  const capacidades = [
-    "Tiene capacidad cómoda para hasta 10 personas.",
-    "Espacio ideal para grupos o familias de hasta 10 huéspedes.",
-    "Recibe hasta un máximo de 10 personas.",
-    "Apta para albergar hasta 10 integrantes."
+  const comodidadesP2 = [
+    "Contamos con espacios súper cómodos y equipados con piscina, aire acondicionado, cocina equipada, nevera, área de parrillera, estacionamiento privado y planta eléctrica para que disfrutes sin preocupaciones.",
+    "La villa está pensada para el descanso familiar o en grupo, con acceso a piscina, habitaciones climatizadas, cocina completa, parrilleras, estacionamiento seguro y respaldo de planta eléctrica.",
+    "Disponemos de instalaciones completas con piscina, áreas sociales, parrilleras, habitaciones con aire acondicionado, cocina equipada, estacionamiento y servicio de planta eléctrica."
   ];
 
-  const distribuciones = [
-    "Dispone de 3 habitaciones amplias, 1 baño completo, cocina con todos sus utensilios y piscina privada.",
-    "Cuenta con 3 cuartos espaciosos, un baño completo, cocina equipada al 100% y su área de piscina.",
-    "Incluye 3 dormitorios, baño completo, cocina lista para cocinar y piscina exclusiva para tu grupo.",
-    "La casa tiene 3 habitaciones, 1 baño, cocina con electrodomésticos y zona de alberca."
+  const tarifasP2 = [
+    "Trabajamos con tarifas por noche que se ajustan según la cantidad de huéspedes y la temporada en la que nos visiten.",
+    "El valor de la estadía varía dependiendo del número de personas del grupo y las fechas seleccionadas.",
+    "Manejamos planes por noche adaptados al tamaño de tu grupo y a los días de estadía."
   ];
 
-  const extras = [
-    "El Wi-Fi está incluido durante toda la estancia.",
-    "Cuentan con servicio de internet Wi-Fi.",
-    "Conectividad Wi-Fi disponible.",
-    "Incluye conexión Wi-Fi sin costo adicional."
+  const cierresP2 = [
+    "Si me indicas cuántas personas son y la fecha exacta, te confirmo el monto total y disponibilidad de inmediato.",
+    "Dime qué días te gustaría reservar y el número de huéspedes para pasarte la cotización exacta por aquí mismo.",
+    "Cualquier duda me comentas por acá, o si prefieres atención directa puedes escribirnos al contacto de nuestro perfil."
   ];
 
-  const horarios = [
-    "El horario de entrada es a las 3:00 PM y la salida a las 11:00 AM.",
-    "Check-in: 3:00 PM | Check-out: 11:00 AM.",
-    "Entrada a partir de las 3:00 PM y salida hasta las 11:00 AM.",
-    "Manejamos ingreso a las 3:00 PM y retiro a las 11:00 AM."
-  ];
-
-  const tarifas = [
-    "El valor por noche es de 150.",
-    "La estancia está en 150 la noche.",
-    "Costo por noche: 150.",
-    "Queda en 150 por noche completa."
-  ];
-
-  const cierres = [
-    "Si gustas asegurar fechas o consultar detalles, revisa el enlace directo en nuestro perfil.",
-    "Para consultar disponibilidad de tus fechas, entra al enlace de nuestra bio.",
-    "Cualquier consulta puntual o para agendar, puedes escribirnos por el link de la biografía.",
-    "Si deseas coordinar tu llegada, déjanos un mensaje por el enlace del perfil."
-  ];
-
-  function randomItem(lista) {
-    return lista[Math.floor(Math.random() * lista.length)];
+  function aleatorio(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
-  function crearVariacion() {
-    const estilo = Math.floor(Math.random() * 2);
-    let texto = "";
-
-    if (estilo === 0) {
-      // Formato estructurado con viñetas
-      texto = `${randomItem(saludos)}\n\n` +
-              `📍 ${randomItem(ubicaciones)}\n` +
-              `👥 ${randomItem(capacidades)}\n` +
-              `🏠 ${randomItem(distribuciones)}\n` +
-              `📶 ${randomItem(extras)}\n` +
-              `⏰ ${randomItem(horarios)}\n` +
-              `🏷️ ${randomItem(tarifas)}\n\n` +
-              `${randomItem(cierres)}`;
-    } else {
-      // Formato narrativo natural (tipo conversación rápida)
-      texto = `${randomItem(saludos)} ` +
-              `${randomItem(ubicaciones)} ` +
-              `${randomItem(capacidades)} ${randomItem(distribuciones)} ` +
-              `${randomItem(extras)} ` +
-              `El horario es de check-in 3:00 PM y check-out 11:00 AM. ` +
-              `${randomItem(tarifas)} ` +
-              `${randomItem(cierres)}`;
-    }
-
-    document.getElementById("output").innerText = texto;
-    document.getElementById("status").innerText = "¡Nueva versión lista para copiar!";
-  }
-
-  function copiarTexto() {
-    const contenido = document.getElementById("output").innerText;
-    if (contenido.includes("Presiona")) return;
+  function cambiarModo(modo) {
+    modoActual = modo;
+    document.getElementById('tab1').classList.toggle('active', modo === 1);
+    document.getElementById('tab2').classList.toggle('active', modo === 2);
     
-    navigator.clipboard.writeText(contenido).then(() => {
-      document.getElementById("status").innerText = "✅ Mensaje copiado al portapapeles.";
-      setTimeout(() => {
-        document.getElementById("status").innerText = "Listo para enviar.";
-      }, 2000);
+    const badge = document.getElementById('badgeInfo');
+    if (modo === 1) {
+      badge.textContent = "Paso 1: Abre el chat sin activar filtros";
+      badge.style.background = "#e0f2fe";
+      badge.style.color = "#0369a1";
+    } else {
+      badge.textContent = "Paso 2: Úsalo solo cuando el cliente responda";
+      badge.style.background = "#ccfbf1";
+      badge.style.color = "#0f766e";
+    }
+    generar();
+  }
+
+  function generar() {
+    const box = document.getElementById('textoGenerado');
+    const status = document.getElementById('statusMsg');
+
+    if (modoActual === 1) {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * mensajesPaso1.length);
+      } while (idx === ultimoIndice && mensajesPaso1.length > 1);
+      ultimoIndice = idx;
+      box.textContent = mensajesPaso1[idx];
+    } else {
+      const p1 = `${aleatorio(saludosP2)} ${aleatorio(comodidadesP2)}`;
+      const p2 = aleatorio(tarifasP2);
+      const p3 = aleatorio(cierresP2);
+
+      if (Math.random() > 0.5) {
+        box.textContent = `${p1}\n\n${p2} ${p3}`;
+      } else {
+        box.textContent = `${p1}\n\n${p2}\n\n${p3}`;
+      }
+    }
+    status.textContent = "Nueva versión generada";
+  }
+
+  function copiar() {
+    const texto = document.getElementById('textoGenerado').textContent;
+    navigator.clipboard.writeText(texto).then(() => {
+      document.getElementById('statusMsg').textContent = "¡Copiado! Pégalo en TikTok";
     });
   }
+
+  generar();
 </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
+
 </body>
 </html>
