@@ -37,18 +37,18 @@
       width: 100%;
       max-width: 440px;
       border-radius: 20px;
-      padding: 24px;
+      padding: 22px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.06);
     }
     h1 {
       color: var(--primary);
-      font-size: 1.35rem;
+      font-size: 1.3rem;
       text-align: center;
       margin: 0 0 14px 0;
     }
     .tabs {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 14px;
       background: #f1f5f9;
       padding: 4px;
@@ -56,10 +56,10 @@
     }
     .tab {
       flex: 1;
-      padding: 10px 8px;
+      padding: 9px 6px;
       border: none;
       border-radius: 9px;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
       background: transparent;
@@ -73,9 +73,9 @@
     }
     .badge {
       display: inline-block;
-      font-size: 0.75rem;
-      background: #e0f2fe;
-      color: #0369a1;
+      font-size: 0.74rem;
+      background: #fef3c7;
+      color: #92400e;
       padding: 4px 10px;
       border-radius: 20px;
       margin-bottom: 10px;
@@ -86,7 +86,7 @@
       border: 1.5px solid #e2e8f0;
       border-radius: 14px;
       padding: 16px;
-      min-height: 175px;
+      min-height: 165px;
       font-size: 0.95rem;
       line-height: 1.55;
       white-space: pre-wrap;
@@ -125,11 +125,12 @@
   <h1>Villa Chichiriviche • Pro</h1>
 
   <div class="tabs">
-    <button class="tab active" id="tab1" onclick="cambiarModo(1)">1. Primer mensaje</button>
-    <button class="tab" id="tab2" onclick="cambiarModo(2)">2. Dar info y detalles</button>
+    <button class="tab active" id="tab0" onclick="cambiarModo(0)">Comentarios</button>
+    <button class="tab" id="tab1" onclick="cambiarModo(1)">1. Chat Inicio</button>
+    <button class="tab" id="tab2" onclick="cambiarModo(2)">2. Info y Detalles</button>
   </div>
 
-  <div id="badgeInfo" class="badge">Paso 1: Abre el chat sin activar filtros</div>
+  <div id="badgeInfo" class="badge">Comentarios públicos: +2,500 variaciones seguras</div>
 
   <div class="output-box" id="textoGenerado"></div>
 
@@ -138,13 +139,39 @@
     <button class="action-btn btn-copy" onclick="copiar()">Copiar texto</button>
   </div>
 
-  <div class="status" id="statusMsg">Historial activo: 0 mensajes únicos</div>
+  <div class="status" id="statusMsg">Historial activo: 0 textos únicos</div>
 </div>
 
 <script>
-  let modoActual = 1;
-  let historial = JSON.parse(localStorage.getItem('villa_historial_v3') || '[]');
+  let modoActual = 0;
+  let historial = JSON.parse(localStorage.getItem('villa_historial_v4') || '[]');
 
+  // --- BLOQUES COMENTARIOS PÚBLICOS (+2,500 combinaciones seguras) ---
+  const comSaludos = [
+    "¡Hola!", "¡Buenas!", "Hola, ¿qué tal?", "¡Saludos!", "Hola, gracias por comentar.",
+    "¡Qué gusto saludarte!", "Hola, por aquí te respondo.", "¡Hola! Qué bueno verte por acá.",
+    "Gracias por el interés.", "Hola, bienvenido.", "¡Buenas! Gracias por preguntar."
+  ];
+  const comCuerpos = [
+    "ya te dejé un mensaje por privado con los detalles",
+    "revísate tus mensajes que te escribí por allá",
+    "te mandé un saludito por mensaje directo para contarte",
+    "dime para qué fecha buscas y cuántos van para revisarte",
+    "cuéntame qué días tienes pensado venir a Chichiriviche",
+    "te respondí al privado para darte toda la información",
+    "pásate por nuestros mensajes o escríbenos por aquí mismo",
+    "avísame qué fecha te interesa y te paso la disponibilidad",
+    "en nuestro perfil tienes el contacto directo por si prefieres atención rápida",
+    "te dejé la información por privado para conversar mejor",
+    "dime cuántas personas serían y qué día buscan"
+  ];
+  const comCierres = [
+    "de Villa Chichiriviche.", "para tu estadía.", "con mucho gusto.", "cuando gustes.",
+    "en la villa.", "por allá te espero.", "para ayudarte.",
+    "sin compromiso.", "para tu viaje.", ""
+  ];
+
+  // --- BLOQUES PASO 1 (CHAT INICIO) ---
   const p1Saludos = [
     "¡Hola!", "¡Buenas!", "Hola, ¿cómo estás?", "¡Saludos!", "¡Hola! Qué gusto saludarte.",
     "Hola, gracias por escribirnos.", "¡Buenas! Gracias por contactarnos.", "Hola, ¿qué tal?"
@@ -165,6 +192,7 @@
     "Dime para cuántas personas sería el hospedaje y qué días tienen en mente."
   ];
 
+  // --- BLOQUES PASO 2 (INFO Y DETALLES) ---
   const p2Aperturas = [
     "¡Perfecto! Te cuento cómo trabajamos en Villa Chichiriviche.",
     "Con mucho gusto te detallo lo que ofrecemos en nuestra villa.",
@@ -172,21 +200,18 @@
     "Te comparto los detalles de nuestras instalaciones.",
     "Excelente, te explico todo lo que incluye la estadía con nosotros."
   ];
-
   const p2Comodidades = [
     "Contamos con espacios súper cómodos y equipados con piscina, aire acondicionado, cocina equipada, nevera, área de parrillera, estacionamiento privado y planta eléctrica para que disfrutes sin preocupaciones.",
     "La villa está pensada para el descanso familiar o en grupo, con acceso a piscina, habitaciones climatizadas, cocina completa, parrilleras, estacionamiento seguro y respaldo de planta eléctrica.",
     "Disponemos de instalaciones completas con piscina, áreas sociales, parrilleras, habitaciones con aire acondicionado, cocina equipada, estacionamiento y servicio de planta eléctrica.",
     "Ofrecemos habitaciones con aire acondicionado, piscina, cocina equipada, área de parrilleras, estacionamiento privado y planta eléctrica garantizada."
   ];
-
   const p2Tarifas = [
     "Trabajamos con tarifas por noche que se ajustan según la cantidad de huéspedes y la temporada en la que nos visiten.",
     "El valor de la estadía varía dependiendo del número de personas del grupo y las fechas seleccionadas.",
     "Manejamos planes por noche adaptados al tamaño de tu grupo y a los días de estadía.",
     "Nuestras tarifas se calculan por noche según el total de personas que nos visiten y las fechas elegidas."
   ];
-
   const p2Cierres = [
     "Si me indicas cuántas personas son y la fecha exacta, te confirmo el monto total y disponibilidad de inmediato.",
     "Dime qué días te gustaría reservar y el número de huéspedes para pasarte la cotización exacta por aquí mismo.",
@@ -200,16 +225,21 @@
 
   function cambiarModo(modo) {
     modoActual = modo;
+    document.getElementById('tab0').classList.toggle('active', modo === 0);
     document.getElementById('tab1').classList.toggle('active', modo === 1);
     document.getElementById('tab2').classList.toggle('active', modo === 2);
     
     const badge = document.getElementById('badgeInfo');
-    if (modo === 1) {
-      badge.textContent = "Paso 1: Abre el chat sin activar filtros";
+    if (modo === 0) {
+      badge.textContent = "Comentarios públicos: +2,500 variaciones seguras";
+      badge.style.background = "#fef3c7";
+      badge.style.color = "#92400e";
+    } else if (modo === 1) {
+      badge.textContent = "Paso 1 Chat: Abre conversación sin activar filtros";
       badge.style.background = "#e0f2fe";
       badge.style.color = "#0369a1";
     } else {
-      badge.textContent = "Paso 2: Úsalo solo cuando el cliente responda";
+      badge.textContent = "Paso 2 Chat: Úsalo solo cuando el cliente responda";
       badge.style.background = "#ccfbf1";
       badge.style.color = "#0f766e";
     }
@@ -217,7 +247,18 @@
   }
 
   function construirTexto() {
-    if (modoActual === 1) {
+    if (modoActual === 0) {
+      const sal = pick(comSaludos);
+      const cue = pick(comCuerpos);
+      const cie = pick(comCierres);
+      const cuerpoCap = cue.charAt(0).toUpperCase() + cue.slice(1);
+      
+      if (Math.random() > 0.3) {
+        return `${sal} ${cuerpoCap}${cie ? ' ' + cie : '.'}`;
+      } else {
+        return `${cuerpoCap}${cie ? ' ' + cie : '.'}`;
+      }
+    } else if (modoActual === 1) {
       if (Math.random() > 0.25) {
         return `${pick(p1Saludos)} ${pick(p1Confirmacion)} ${pick(p1Preguntas)}`;
       } else {
@@ -255,8 +296,8 @@
   function copiar() {
     const texto = document.getElementById('textoGenerado').textContent;
     historial.push(texto);
-    if (historial.length > 400) historial.shift();
-    localStorage.setItem('villa_historial_v3', JSON.stringify(historial));
+    if (historial.length > 500) historial.shift();
+    localStorage.setItem('villa_historial_v4', JSON.stringify(historial));
 
     navigator.clipboard.writeText(texto).then(() => {
       document.getElementById('statusMsg').textContent = `¡Copiado! (${historial.length} únicos en memoria)`;
