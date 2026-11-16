@@ -1,4 +1,4 @@
-const CACHE_NAME = 'villa-chichiriviche-v4';
+const CACHE_NAME = 'villa-chichiriviche-v5';
 const urlsToCache = [
   './',
   './index.html',
