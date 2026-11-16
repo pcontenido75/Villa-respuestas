@@ -127,10 +127,10 @@
   <div class="tabs">
     <button class="tab active" id="tab0" onclick="cambiarModo(0)">Comentarios</button>
     <button class="tab" id="tab1" onclick="cambiarModo(1)">1. Chat Inicio</button>
-    <button class="tab" id="tab2" onclick="cambiarModo(2)">2. Info y Detalles</button>
+    <button class="tab" id="tab2" onclick="cambiarModo(2)">2. Info / WA</button>
   </div>
 
-  <div id="badgeInfo" class="badge">Comentarios públicos: +2,500 variaciones seguras</div>
+  <div id="badgeInfo" class="badge">Comentarios públicos: +3,000 variaciones seguras</div>
 
   <div class="output-box" id="textoGenerado"></div>
 
@@ -144,55 +144,70 @@
 
 <script>
   let modoActual = 0;
-  let historial = JSON.parse(localStorage.getItem('villa_historial_v4') || '[]');
+  let historial = JSON.parse(localStorage.getItem('villa_historial_v5') || '[]');
 
-  // --- BLOQUES COMENTARIOS PÚBLICOS (+2,500 combinaciones seguras) ---
+  // --- BLOQUES COMENTARIOS PÚBLICOS (+3,000 combinaciones seguras sin palabras bloqueadas) ---
+  // Todas invitan al cliente a escribir primero al privado
   const comSaludos = [
     "¡Hola!", "¡Buenas!", "Hola, ¿qué tal?", "¡Saludos!", "Hola, gracias por comentar.",
-    "¡Qué gusto saludarte!", "Hola, por aquí te respondo.", "¡Hola! Qué bueno verte por acá.",
-    "Gracias por el interés.", "Hola, bienvenido.", "¡Buenas! Gracias por preguntar."
-  ];
-  const comCuerpos = [
-    "ya te dejé un mensaje por privado con los detalles",
-    "revísate tus mensajes que te escribí por allá",
-    "te mandé un saludito por mensaje directo para contarte",
-    "dime para qué fecha buscas y cuántos van para revisarte",
-    "cuéntame qué días tienes pensado venir a Chichiriviche",
-    "te respondí al privado para darte toda la información",
-    "pásate por nuestros mensajes o escríbenos por aquí mismo",
-    "avísame qué fecha te interesa y te paso la disponibilidad",
-    "en nuestro perfil tienes el contacto directo por si prefieres atención rápida",
-    "te dejé la información por privado para conversar mejor",
-    "dime cuántas personas serían y qué día buscan"
-  ];
-  const comCierres = [
-    "de Villa Chichiriviche.", "para tu estadía.", "con mucho gusto.", "cuando gustes.",
-    "en la villa.", "por allá te espero.", "para ayudarte.",
-    "sin compromiso.", "para tu viaje.", ""
+    "¡Qué gusto saludarte!", "¡Hola! Qué bueno verte por acá.", "Gracias por el interés.",
+    "Hola, bienvenido.", "¡Buenas! Gracias por preguntar.", "¡Hola, cómo estás?",
+    "Saludos desde Chichiriviche.", "¡Hola! Qué alegría recibir tu mensaje."
   ];
 
-  // --- BLOQUES PASO 1 (CHAT INICIO) ---
+  const comAccionPrivado = [
+    "escríbenos un mensaje al privado y te pasamos todos los detalles",
+    "mándanos un mensajito directo por acá para atenderte al momento",
+    "escríbenos por mensaje directo indicándonos qué fecha buscas",
+    "envíanos un mensaje al privado para darte toda la información",
+    "pásate por nuestro chat privado y con gusto te asesoramos",
+    "mándanos un mensaje directo para contarte sobre nuestras instalaciones y opciones",
+    "escríbenos al privado con la fecha que tienes en mente",
+    "envíanos un mensajito por privado y te respondemos de inmediato",
+    "escríbenos por mensaje directo para darte la información completa",
+    "mándanos un mensaje al privado y te damos atención personalizada",
+    "escríbenos al privado contándonos cuántas personas vienen",
+    "envíanos un mensaje directo para pasarte los detalles del hospedaje",
+    "escríbenos por privado y te enviamos toda la información al instante",
+    "mándanos un mensajito directo por acá para orientarte",
+    "también tienes el acceso directo en nuestro perfil si prefieres atención rápida por mensajería"
+  ];
+
+  const comCierres = [
+    "de Villa Chichiriviche.",
+    "para tu estadía con nosotros.",
+    "con mucho gusto.",
+    "¡Te esperamos por allá!",
+    "sin ningún compromiso.",
+    "para ayudarte a planificar tu viaje.",
+    "en la villa.",
+    "¡Quedamos súper atentos!",
+    "para recibirlos en Chichiriviche.",
+    "cuando gustes.",
+    ""
+  ];
+
+  // --- BLOQUES PASO 1 (CHAT INICIO - Sin comprometer fechas) ---
   const p1Saludos = [
     "¡Hola!", "¡Buenas!", "Hola, ¿cómo estás?", "¡Saludos!", "¡Hola! Qué gusto saludarte.",
     "Hola, gracias por escribirnos.", "¡Buenas! Gracias por contactarnos.", "Hola, ¿qué tal?"
   ];
-  const p1Confirmacion = [
-    "Sí tenemos disponibilidad en Villa Chichiriviche.",
-    "Claro que sí, contamos con estadía disponible en la villa.",
-    "Con mucho gusto te ayudo con tu viaje a Chichiriviche.",
-    "Sí tenemos opciones disponibles para recibirlos.",
-    "Con gusto te paso todos los detalles de Villa Chichiriviche."
+  const p1Presentacion = [
+    "Con mucho gusto te ayudo con la información de Villa Chichiriviche.",
+    "Claro que sí, te cuento cómo trabajamos en nuestra villa.",
+    "Con gusto te paso todos los detalles de Villa Chichiriviche.",
+    "Será un placer orientarte para tu próximo viaje a Chichiriviche."
   ];
   const p1Preguntas = [
     "¿Para qué fechas estás buscando y cuántas personas serían?",
     "¿Qué días tienes pensado venir y cuántos huéspedes van?",
     "Cuéntame para qué fecha buscas y cuántas personas serían.",
     "¿Para cuántas personas necesitas y en qué fecha vendrían?",
-    "¿Qué fecha te interesa consultar y cuántos van en el grupo?",
+    "¿Qué fecha te interesa y cuántos van en el grupo?",
     "Dime para cuántas personas sería el hospedaje y qué días tienen en mente."
   ];
 
-  // --- BLOQUES PASO 2 (INFO Y DETALLES) ---
+  // --- BLOQUES PASO 2 (INFO Y DETALLES REALES - SIN PLANTA ELÉCTRICA + DERIVACIÓN A WHATSAPP) ---
   const p2Aperturas = [
     "¡Perfecto! Te cuento cómo trabajamos en Villa Chichiriviche.",
     "Con mucho gusto te detallo lo que ofrecemos en nuestra villa.",
@@ -201,10 +216,10 @@
     "Excelente, te explico todo lo que incluye la estadía con nosotros."
   ];
   const p2Comodidades = [
-    "Contamos con espacios súper cómodos y equipados con piscina, aire acondicionado, cocina equipada, nevera, área de parrillera, estacionamiento privado y planta eléctrica para que disfrutes sin preocupaciones.",
-    "La villa está pensada para el descanso familiar o en grupo, con acceso a piscina, habitaciones climatizadas, cocina completa, parrilleras, estacionamiento seguro y respaldo de planta eléctrica.",
-    "Disponemos de instalaciones completas con piscina, áreas sociales, parrilleras, habitaciones con aire acondicionado, cocina equipada, estacionamiento y servicio de planta eléctrica.",
-    "Ofrecemos habitaciones con aire acondicionado, piscina, cocina equipada, área de parrilleras, estacionamiento privado y planta eléctrica garantizada."
+    "Contamos con espacios súper cómodos y equipados con piscina, aire acondicionado, cocina equipada, nevera, área de parrillera y estacionamiento privado para que disfrutes al máximo.",
+    "La villa está pensada para el descanso familiar o en grupo, con acceso a piscina, habitaciones climatizadas con aire acondicionado, cocina completa, parrilleras y estacionamiento seguro.",
+    "Disponemos de instalaciones completas con piscina, áreas sociales, parrilleras, habitaciones con aire acondicionado, cocina equipada y estacionamiento privado.",
+    "Ofrecemos habitaciones con aire acondicionado, piscina, cocina equipada con nevera, área de parrilleras y estacionamiento privado."
   ];
   const p2Tarifas = [
     "Trabajamos con tarifas por noche que se ajustan según la cantidad de huéspedes y la temporada en la que nos visiten.",
@@ -212,11 +227,12 @@
     "Manejamos planes por noche adaptados al tamaño de tu grupo y a los días de estadía.",
     "Nuestras tarifas se calculan por noche según el total de personas que nos visiten y las fechas elegidas."
   ];
-  const p2Cierres = [
-    "Si me indicas cuántas personas son y la fecha exacta, te confirmo el monto total y disponibilidad de inmediato.",
-    "Dime qué días te gustaría reservar y el número de huéspedes para pasarte la cotización exacta por aquí mismo.",
-    "Avísame para qué fecha buscas y cuántos son para revisarte disponibilidad y tarifa exacta.",
-    "Cualquier duda me comentas por acá, o si prefieres atención directa puedes escribirnos al contacto de nuestro perfil."
+  const p2CierresWA = [
+    "Para verificar disponibilidad de fechas, recibir la cotización exacta y concretar tu reserva, escríbenos directamente al contacto de nuestro perfil (WhatsApp) donde te atendemos al momento.",
+    "Todas las reservas, cotizaciones por grupo y consultas de fechas disponibles se gestionan directamente por nuestro WhatsApp (tienes el acceso directo en el perfil).",
+    "Si te gustaría revisar disponibilidad para tus días y recibir tu tarifa exacta, dale al enlace de nuestro perfil para escribirnos directo al WhatsApp.",
+    "Para confirmar disponibilidad en calendario, cotizar según tu grupo y apartar tus fechas, contáctanos directo al WhatsApp que aparece en nuestro perfil.",
+    "La disponibilidad de fechas y reservaciones las manejamos exclusivamente por nuestro WhatsApp. Puedes entrar directo desde el enlace de nuestro perfil para coordinar tu estadía."
   ];
 
   function pick(arr) {
@@ -231,15 +247,15 @@
     
     const badge = document.getElementById('badgeInfo');
     if (modo === 0) {
-      badge.textContent = "Comentarios públicos: +2,500 variaciones seguras";
+      badge.textContent = "Comentarios públicos: +3,000 variaciones seguras";
       badge.style.background = "#fef3c7";
       badge.style.color = "#92400e";
     } else if (modo === 1) {
-      badge.textContent = "Paso 1 Chat: Abre conversación sin activar filtros";
+      badge.textContent = "Paso 1 Chat: Abre conversación sin comprometer fechas";
       badge.style.background = "#e0f2fe";
       badge.style.color = "#0369a1";
     } else {
-      badge.textContent = "Paso 2 Chat: Úsalo solo cuando el cliente responda";
+      badge.textContent = "Paso 2 Chat: Info real + Deriva reservas a WhatsApp";
       badge.style.background = "#ccfbf1";
       badge.style.color = "#0f766e";
     }
@@ -249,18 +265,27 @@
   function construirTexto() {
     if (modoActual === 0) {
       const sal = pick(comSaludos);
-      const cue = pick(comCuerpos);
+      const acc = pick(comAccionPrivado);
       const cie = pick(comCierres);
-      const cuerpoCap = cue.charAt(0).toUpperCase() + cue.slice(1);
+      const accCap = acc.charAt(0).toUpperCase() + acc.slice(1);
       
-      if (Math.random() > 0.3) {
-        return `${sal} ${cuerpoCap}${cie ? ' ' + cie : '.'}`;
+      let textoFinal = "";
+      if (!cie) {
+        textoFinal = `${accCap}.`;
+      } else if (cie.startsWith("¡")) {
+        textoFinal = `${accCap}. ${cie}`;
       } else {
-        return `${cuerpoCap}${cie ? ' ' + cie : '.'}`;
+        textoFinal = `${accCap} ${cie}`;
+      }
+
+      if (Math.random() > 0.25) {
+        return `${sal} ${textoFinal}`;
+      } else {
+        return textoFinal;
       }
     } else if (modoActual === 1) {
       if (Math.random() > 0.25) {
-        return `${pick(p1Saludos)} ${pick(p1Confirmacion)} ${pick(p1Preguntas)}`;
+        return `${pick(p1Saludos)} ${pick(p1Presentacion)} ${pick(p1Preguntas)}`;
       } else {
         return `${pick(p1Saludos)} ${pick(p1Preguntas)}`;
       }
@@ -268,7 +293,7 @@
       const ap = pick(p2Aperturas);
       const com = pick(p2Comodidades);
       const tar = pick(p2Tarifas);
-      const cie = pick(p2Cierres);
+      const cie = pick(p2CierresWA);
 
       const molde = Math.random();
       if (molde < 0.35) {
@@ -297,7 +322,7 @@
     const texto = document.getElementById('textoGenerado').textContent;
     historial.push(texto);
     if (historial.length > 500) historial.shift();
-    localStorage.setItem('villa_historial_v4', JSON.stringify(historial));
+    localStorage.setItem('villa_historial_v5', JSON.stringify(historial));
 
     navigator.clipboard.writeText(texto).then(() => {
       document.getElementById('statusMsg').textContent = `¡Copiado! (${historial.length} únicos en memoria)`;
@@ -305,6 +330,7 @@
     });
   }
 
+  document.getElementById('statusMsg').textContent = `Historial activo: ${historial.length} textos únicos`;
   generar();
 </script>
 
