@@ -103,7 +103,7 @@
 
 <div class="container">
     <h1>🌴 Villa Chichiriviche</h1>
-    <p class="subtitle">Generador anti-repetición (+2.4 millones de combinaciones)</p>
+    <p class="subtitle">Generador anti-repetición (+3.6 millones de combinaciones)</p>
 
     <div id="mensaje" class="output-box"></div>
 
@@ -116,7 +116,6 @@
 </div>
 
 <script>
-    // Historial para evitar que se repitan frases usadas recientemente
     const historial = {
         saludo: [],
         ubicacion: [],
@@ -148,7 +147,7 @@
         "La casa se encuentra a pasos de todo: apenas a 2 cuadras del malecón y a 1 cuadra del centro.",
         "Un hospedaje práctico y relajante, situado a 2 cuadras del malecón y a 1 cuadra del centro.",
         "Excelente ubicación para moverte caminando: a 2 cuadras del malecón y a 1 cuadra del centro.",
-        "Alójate cerca de todo en nuestra casa, a solo 2 cuadras del malecón y 1 del centro."
+        "Alójate cerca de todo en nuestra casa, a solo 2 cuadras del malecón y a 1 cuadra del centro."
     ];
 
     const capacidades = [
@@ -193,21 +192,26 @@
         "Tarifa vigente: 150 por noche."
     ];
 
+    // Cierres discretos hacia el perfil/enlace (sin mencionar WhatsApp ni números directamente)
     const cierres = [
-        "Si deseas consultar disponibilidad o realizar una reserva, ¡quedo a tu disposición!",
-        "Cuéntame para qué fechas nos visitas y revisamos disponibilidad de inmediato.",
-        "Escríbeme las fechas de tu viaje para confirmar disponibilidad y apartar tu estadía.",
-        "Quedo atento a las fechas que buscas para verificar el calendario y ayudarte con tu reserva.",
-        "¿Para qué días te gustaría reservar? Estoy por aquí para ayudarte con cualquier consulta.",
-        "Dime qué fechas tienes pensadas y con gusto verifico disponibilidad para tu grupo.",
-        "Estoy a tu orden para revisar disponibilidad o ayudarte a concretar tu reserva.",
-        "Si quieres confirmar fechas disponibles o apartar la casa, escríbeme por aquí."
+        "Para consultar disponibilidad en nuestro calendario o apartar tus fechas, ingresa al enlace directo que encuentras en nuestro perfil. 📲",
+        "Manejamos toda la agenda y reservas desde nuestro canal de atención directa; tienes el acceso en la descripción de nuestro perfil. 🌴",
+        "Si deseas verificar fechas disponibles y formalizar tu reserva, puedes contactarnos a través del enlace ubicado en nuestro perfil. ✨",
+        "Para revisar disponibilidad de fechas y coordinar tu estadía, te esperamos en el enlace directo de nuestro perfil.",
+        "Consulta disponibilidad y aparta tus días fácilmente entrando al enlace que aparece en la información de nuestro perfil. 🏡",
+        "Toda nuestra atención de reservas y revisión de fechas se gestiona por el acceso directo que dejamos en nuestro perfil.",
+        "¿Quieres revisar si tus fechas están libres? Toca el enlace en nuestro perfil para atenderte de inmediato y apartar tu estadía.",
+        "Para confirmar disponibilidad según tus fechas y gestionar tu reserva, ubícanos en el enlace de contacto de nuestro perfil. 📲",
+        "Si te gustaría apartar fechas o consultar el calendario, dirígete al acceso directo que está en nuestro perfil y con gusto te atendemos.",
+        "Gestionamos las reservas de forma personalizada a través del enlace disponible en la biografía de nuestro perfil. 🌴",
+        "Para verificar disponibilidad de fechas y asegurar tu reserva, solo debes ingresar al enlace que ves en nuestro perfil.",
+        "Te invitamos a revisar disponibilidad y coordinar tu reserva directamente desde el enlace en nuestro perfil. ✨"
     ];
 
     const vinetas = ["•", "▸", "▪", "-", "✓", "🌴", "✨", "🏡"];
 
     function seleccionarSinRepetir(lista, clave) {
-        const limiteMemoria = Math.floor(lista.length * 0.7);
+        const limiteMemoria = Math.floor(lista.length * 0.75);
         const disponibles = lista.filter(item => !historial[clave].includes(item));
         const pool = disponibles.length > 0 ? disponibles : lista;
         const elegido = pool[Math.floor(Math.random() * pool.length)];
@@ -229,7 +233,6 @@
         const cie = seleccionarSinRepetir(cierres, "cierre");
         const v = vinetas[Math.floor(Math.random() * vinetas.length)];
 
-        // Variación de estructura visual (3 formatos distintos)
         const formato = Math.floor(Math.random() * 3);
         let mensajeFinal = "";
 
