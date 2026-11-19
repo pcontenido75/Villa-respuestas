@@ -1,337 +1,261 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Villa Chichiriviche - Respuestas</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" href="logo.png">
-  <meta name="theme-color" content="#0369a1">
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
-  <style>
-    :root {
-      --primary: #0369a1;
-      --secondary: #0d9488;
-      --bg: #f0f9ff;
-      --card: #ffffff;
-      --text: #1e293b;
-      --muted: #64748b;
-    }
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      margin: 0;
-      padding: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    .container {
-      background: var(--card);
-      width: 100%;
-      max-width: 440px;
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-    }
-    h1 {
-      color: var(--primary);
-      font-size: 1.3rem;
-      text-align: center;
-      margin: 0 0 14px 0;
-    }
-    .tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 14px;
-      background: #f1f5f9;
-      padding: 4px;
-      border-radius: 12px;
-    }
-    .tab {
-      flex: 1;
-      padding: 9px 6px;
-      border: none;
-      border-radius: 9px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      background: transparent;
-      color: var(--muted);
-      transition: all 0.2s;
-    }
-    .tab.active {
-      background: var(--card);
-      color: var(--primary);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
-    .badge {
-      display: inline-block;
-      font-size: 0.74rem;
-      background: #fef3c7;
-      color: #92400e;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-    .output-box {
-      background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 16px;
-      min-height: 165px;
-      font-size: 0.95rem;
-      line-height: 1.55;
-      white-space: pre-wrap;
-      margin-bottom: 16px;
-      color: #334155;
-    }
-    .actions {
-      display: flex;
-      gap: 10px;
-    }
-    button.action-btn {
-      flex: 1;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.1s;
-    }
-    button.action-btn:active { transform: scale(0.98); }
-    .btn-gen { background: var(--primary); color: white; }
-    .btn-copy { background: var(--secondary); color: white; }
-    .status {
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 12px;
-      min-height: 18px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respuestas Villa Chichiriviche</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f4f8;
+            color: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        h1 {
+            font-size: 1.35rem;
+            color: #0f766e;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        p.subtitle {
+            font-size: 0.82rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .output-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.94rem;
+            line-height: 1.52;
+            white-space: pre-line;
+            color: #334155;
+            min-height: 250px;
+            margin-bottom: 16px;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .btn-generate {
+            background-color: #0d9488;
+            color: white;
+        }
+        .btn-generate:hover {
+            background-color: #0f766e;
+        }
+        .btn-copy {
+            background-color: #0284c7;
+            color: white;
+        }
+        .btn-copy:hover {
+            background-color: #0369a1;
+        }
+        .toast {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #059669;
+            font-weight: 600;
+            margin-top: 12px;
+            height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Villa Chichiriviche • Pro</h1>
+    <h1>🌴 Villa Chichiriviche</h1>
+    <p class="subtitle">Generador anti-repetición (+2.4 millones de combinaciones)</p>
 
-  <div class="tabs">
-    <button class="tab active" id="tab0" onclick="cambiarModo(0)">Comentarios</button>
-    <button class="tab" id="tab1" onclick="cambiarModo(1)">1. Chat Inicio</button>
-    <button class="tab" id="tab2" onclick="cambiarModo(2)">2. Info / WA</button>
-  </div>
+    <div id="mensaje" class="output-box"></div>
 
-  <div id="badgeInfo" class="badge">Comentarios públicos: +3,000 variaciones seguras</div>
+    <div class="btn-group">
+        <button class="btn-generate" onclick="generarMensaje()">🔄 Generar nuevo mensaje único</button>
+        <button class="btn-copy" onclick="copiarMensaje()">📋 Copiar respuesta</button>
+    </div>
 
-  <div class="output-box" id="textoGenerado"></div>
-
-  <div class="actions">
-    <button class="action-btn btn-gen" onclick="generar()">Otra versión</button>
-    <button class="action-btn btn-copy" onclick="copiar()">Copiar texto</button>
-  </div>
-
-  <div class="status" id="statusMsg">Historial activo: 0 textos únicos</div>
+    <div id="toast" class="toast">✅ ¡Copiado al portapapeles!</div>
 </div>
 
 <script>
-  let modoActual = 0;
-  let historial = JSON.parse(localStorage.getItem('villa_historial_v5') || '[]');
+    // Historial para evitar que se repitan frases usadas recientemente
+    const historial = {
+        saludo: [],
+        ubicacion: [],
+        capacidad: [],
+        amenidades: [],
+        horario: [],
+        precio: [],
+        cierre: []
+    };
 
-  // --- BLOQUES COMENTARIOS PÚBLICOS (+3,000 combinaciones seguras sin palabras bloqueadas) ---
-  // Todas invitan al cliente a escribir primero al privado
-  const comSaludos = [
-    "¡Hola!", "¡Buenas!", "Hola, ¿qué tal?", "¡Saludos!", "Hola, gracias por comentar.",
-    "¡Qué gusto saludarte!", "¡Hola! Qué bueno verte por acá.", "Gracias por el interés.",
-    "Hola, bienvenido.", "¡Buenas! Gracias por preguntar.", "¡Hola, cómo estás?",
-    "Saludos desde Chichiriviche.", "¡Hola! Qué alegría recibir tu mensaje."
-  ];
+    const saludos = [
+        "¡Hola! Qué gusto saludarte.",
+        "¡Hola! Bienvenido a Villa Chichiriviche.",
+        "¡Saludos! Gracias por escribirnos.",
+        "¡Hola! Qué alegría recibir tu mensaje.",
+        "¡Hola! Con mucho gusto te comparto la información.",
+        "¡Hola! Gracias por tu interés en nuestra casa.",
+        "¡Saludos! Te cuento los detalles de nuestro alojamiento.",
+        "¡Hola! Aquí tienes toda la información de la villa.",
+        "¡Hola! Qué bueno saber de ti, te paso los datos:",
+        "¡Hola! Es un placer atenderte."
+    ];
 
-  const comAccionPrivado = [
-    "escríbenos un mensaje al privado y te pasamos todos los detalles",
-    "mándanos un mensajito directo por acá para atenderte al momento",
-    "escríbenos por mensaje directo indicándonos qué fecha buscas",
-    "envíanos un mensaje al privado para darte toda la información",
-    "pásate por nuestro chat privado y con gusto te asesoramos",
-    "mándanos un mensaje directo para contarte sobre nuestras instalaciones y opciones",
-    "escríbenos al privado con la fecha que tienes en mente",
-    "envíanos un mensajito por privado y te respondemos de inmediato",
-    "escríbenos por mensaje directo para darte la información completa",
-    "mándanos un mensaje al privado y te damos atención personalizada",
-    "escríbenos al privado contándonos cuántas personas vienen",
-    "envíanos un mensaje directo para pasarte los detalles del hospedaje",
-    "escríbenos por privado y te enviamos toda la información al instante",
-    "mándanos un mensajito directo por acá para orientarte",
-    "también tienes el acceso directo en nuestro perfil si prefieres atención rápida por mensajería"
-  ];
+    const ubicaciones = [
+        "Nuestra casa es tu hospedaje ideal a pasos de todo: estamos a solo 2 cuadras del malecón y a 1 cuadra del centro.",
+        "Disfruta de una estancia cómoda y relajante en una ubicación privilegiada, a 2 cuadras del malecón y 1 del centro.",
+        "Estamos ubicados estratégicamente a pasos de todo (a 2 cuadras del malecón y a 1 cuadra del centro).",
+        "Te ofrecemos un espacio cómodo para descansar, ubicado a solo 2 cuadras del malecón y a 1 cuadra del centro.",
+        "La casa se encuentra a pasos de todo: apenas a 2 cuadras del malecón y a 1 cuadra del centro.",
+        "Un hospedaje práctico y relajante, situado a 2 cuadras del malecón y a 1 cuadra del centro.",
+        "Excelente ubicación para moverte caminando: a 2 cuadras del malecón y a 1 cuadra del centro.",
+        "Alójate cerca de todo en nuestra casa, a solo 2 cuadras del malecón y 1 del centro."
+    ];
 
-  const comCierres = [
-    "de Villa Chichiriviche.",
-    "para tu estadía con nosotros.",
-    "con mucho gusto.",
-    "¡Te esperamos por allá!",
-    "sin ningún compromiso.",
-    "para ayudarte a planificar tu viaje.",
-    "en la villa.",
-    "¡Quedamos súper atentos!",
-    "para recibirlos en Chichiriviche.",
-    "cuando gustes.",
-    ""
-  ];
+    const capacidades = [
+        "Capacidad para hasta 10 personas, con 3 amplias habitaciones y 1 baño completo.",
+        "Espacio cómodo para grupos de hasta 10 huéspedes, distribuido en 3 habitaciones amplias y 1 baño completo.",
+        "Cuenta con 3 amplias habitaciones y 1 baño completo, ideal para un máximo de 10 personas.",
+        "Alojamiento hasta para 10 personas en 3 habitaciones espaciosas y 1 baño completo.",
+        "Dispone de 3 habitaciones amplias, 1 baño completo y capacidad máxima para 10 personas.",
+        "Pensada para familias o grupos de hasta 10 personas (3 habitaciones amplias + 1 baño completo).",
+        "Tiene capacidad hasta para 10 huéspedes, ofreciendo 3 amplias habitaciones y 1 baño completo.",
+        "Distribuida en 3 amplias habitaciones y 1 baño completo, recibiendo hasta 10 personas."
+    ];
 
-  // --- BLOQUES PASO 1 (CHAT INICIO - Sin comprometer fechas) ---
-  const p1Saludos = [
-    "¡Hola!", "¡Buenas!", "Hola, ¿cómo estás?", "¡Saludos!", "¡Hola! Qué gusto saludarte.",
-    "Hola, gracias por escribirnos.", "¡Buenas! Gracias por contactarnos.", "Hola, ¿qué tal?"
-  ];
-  const p1Presentacion = [
-    "Con mucho gusto te ayudo con la información de Villa Chichiriviche.",
-    "Claro que sí, te cuento cómo trabajamos en nuestra villa.",
-    "Con gusto te paso todos los detalles de Villa Chichiriviche.",
-    "Será un placer orientarte para tu próximo viaje a Chichiriviche."
-  ];
-  const p1Preguntas = [
-    "¿Para qué fechas estás buscando y cuántas personas serían?",
-    "¿Qué días tienes pensado venir y cuántos huéspedes van?",
-    "Cuéntame para qué fecha buscas y cuántas personas serían.",
-    "¿Para cuántas personas necesitas y en qué fecha vendrían?",
-    "¿Qué fecha te interesa y cuántos van en el grupo?",
-    "Dime para cuántas personas sería el hospedaje y qué días tienen en mente."
-  ];
+    const amenidades = [
+        "Incluye área de piscina, conexión Wi-Fi y cocina totalmente equipada con electrodomésticos y utensilios.",
+        "Disfruta de área de piscina, Wi-Fi incluido y cocina completamente equipada (utensilios y electrodomésticos).",
+        "Tendrás acceso al área de piscina, Wi-Fi y una cocina equipada con todos sus electrodomésticos y utensilios.",
+        "Ofrece área de piscina, Wi-Fi incluido y cocina totalmente equipada para preparar tus comidas.",
+        "Equipada con cocina completa (electrodomésticos y utensilios), área de piscina y Wi-Fi incluido.",
+        "Cuenta con área de piscina, conexión Wi-Fi y cocina totalmente equipada con utensilios y electrodomésticos.",
+        "Para tu comodidad dispone de área de piscina, Wi-Fi y cocina equipada al 100%.",
+        "Incluye Wi-Fi, área de piscina y cocina totalmente equipada (con electrodomésticos y utensilios)."
+    ];
 
-  // --- BLOQUES PASO 2 (INFO Y DETALLES REALES - SIN PLANTA ELÉCTRICA + DERIVACIÓN A WHATSAPP) ---
-  const p2Aperturas = [
-    "¡Perfecto! Te cuento cómo trabajamos en Villa Chichiriviche.",
-    "Con mucho gusto te detallo lo que ofrecemos en nuestra villa.",
-    "Aquí tienes la información completa de Villa Chichiriviche para tu estadía.",
-    "Te comparto los detalles de nuestras instalaciones.",
-    "Excelente, te explico todo lo que incluye la estadía con nosotros."
-  ];
-  const p2Comodidades = [
-    "Contamos con espacios súper cómodos y equipados con piscina, aire acondicionado, cocina equipada, nevera, área de parrillera y estacionamiento privado para que disfrutes al máximo.",
-    "La villa está pensada para el descanso familiar o en grupo, con acceso a piscina, habitaciones climatizadas con aire acondicionado, cocina completa, parrilleras y estacionamiento seguro.",
-    "Disponemos de instalaciones completas con piscina, áreas sociales, parrilleras, habitaciones con aire acondicionado, cocina equipada y estacionamiento privado.",
-    "Ofrecemos habitaciones con aire acondicionado, piscina, cocina equipada con nevera, área de parrilleras y estacionamiento privado."
-  ];
-  const p2Tarifas = [
-    "Trabajamos con tarifas por noche que se ajustan según la cantidad de huéspedes y la temporada en la que nos visiten.",
-    "El valor de la estadía varía dependiendo del número de personas del grupo y las fechas seleccionadas.",
-    "Manejamos planes por noche adaptados al tamaño de tu grupo y a los días de estadía.",
-    "Nuestras tarifas se calculan por noche según el total de personas que nos visiten y las fechas elegidas."
-  ];
-  const p2CierresWA = [
-    "Para verificar disponibilidad de fechas, recibir la cotización exacta y concretar tu reserva, escríbenos directamente al contacto de nuestro perfil (WhatsApp) donde te atendemos al momento.",
-    "Todas las reservas, cotizaciones por grupo y consultas de fechas disponibles se gestionan directamente por nuestro WhatsApp (tienes el acceso directo en el perfil).",
-    "Si te gustaría revisar disponibilidad para tus días y recibir tu tarifa exacta, dale al enlace de nuestro perfil para escribirnos directo al WhatsApp.",
-    "Para confirmar disponibilidad en calendario, cotizar según tu grupo y apartar tus fechas, contáctanos directo al WhatsApp que aparece en nuestro perfil.",
-    "La disponibilidad de fechas y reservaciones las manejamos exclusivamente por nuestro WhatsApp. Puedes entrar directo desde el enlace de nuestro perfil para coordinar tu estadía."
-  ];
+    const horarios = [
+        "Horarios: Check-in (entrada) a las 3:00 PM y Check-out (salida) a las 11:00 AM.",
+        "Entrada (Check-in): 3:00 PM | Salida (Check-out): 11:00 AM.",
+        "Horario de estancia: ingreso desde las 3:00 PM y salida a las 11:00 AM.",
+        "Check-in a partir de las 3:00 PM y Check-out a las 11:00 AM.",
+        "El ingreso (Check-in) es a las 3:00 PM y la salida (Check-out) a las 11:00 AM.",
+        "Horarios de estancia: entrada 3:00 PM / salida 11:00 AM.",
+        "Tu estancia inicia a las 3:00 PM (Check-in) y finaliza a las 11:00 AM (Check-out)."
+    ];
 
-  function pick(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
+    const precios = [
+        "La tarifa es de 150 por noche.",
+        "Tarifa: 150 por noche.",
+        "El valor por noche es de 150.",
+        "Costo de alojamiento: 150 por noche.",
+        "La estadía tiene una tarifa de 150 por noche.",
+        "Maneja una tarifa de 150 por noche.",
+        "Tarifa vigente: 150 por noche."
+    ];
 
-  function cambiarModo(modo) {
-    modoActual = modo;
-    document.getElementById('tab0').classList.toggle('active', modo === 0);
-    document.getElementById('tab1').classList.toggle('active', modo === 1);
-    document.getElementById('tab2').classList.toggle('active', modo === 2);
-    
-    const badge = document.getElementById('badgeInfo');
-    if (modo === 0) {
-      badge.textContent = "Comentarios públicos: +3,000 variaciones seguras";
-      badge.style.background = "#fef3c7";
-      badge.style.color = "#92400e";
-    } else if (modo === 1) {
-      badge.textContent = "Paso 1 Chat: Abre conversación sin comprometer fechas";
-      badge.style.background = "#e0f2fe";
-      badge.style.color = "#0369a1";
-    } else {
-      badge.textContent = "Paso 2 Chat: Info real + Deriva reservas a WhatsApp";
-      badge.style.background = "#ccfbf1";
-      badge.style.color = "#0f766e";
+    const cierres = [
+        "Si deseas consultar disponibilidad o realizar una reserva, ¡quedo a tu disposición!",
+        "Cuéntame para qué fechas nos visitas y revisamos disponibilidad de inmediato.",
+        "Escríbeme las fechas de tu viaje para confirmar disponibilidad y apartar tu estadía.",
+        "Quedo atento a las fechas que buscas para verificar el calendario y ayudarte con tu reserva.",
+        "¿Para qué días te gustaría reservar? Estoy por aquí para ayudarte con cualquier consulta.",
+        "Dime qué fechas tienes pensadas y con gusto verifico disponibilidad para tu grupo.",
+        "Estoy a tu orden para revisar disponibilidad o ayudarte a concretar tu reserva.",
+        "Si quieres confirmar fechas disponibles o apartar la casa, escríbeme por aquí."
+    ];
+
+    const vinetas = ["•", "▸", "▪", "-", "✓", "🌴", "✨", "🏡"];
+
+    function seleccionarSinRepetir(lista, clave) {
+        const limiteMemoria = Math.floor(lista.length * 0.7);
+        const disponibles = lista.filter(item => !historial[clave].includes(item));
+        const pool = disponibles.length > 0 ? disponibles : lista;
+        const elegido = pool[Math.floor(Math.random() * pool.length)];
+
+        historial[clave].push(elegido);
+        if (historial[clave].length > limiteMemoria) {
+            historial[clave].shift();
+        }
+        return elegido;
     }
-    generar();
-  }
 
-  function construirTexto() {
-    if (modoActual === 0) {
-      const sal = pick(comSaludos);
-      const acc = pick(comAccionPrivado);
-      const cie = pick(comCierres);
-      const accCap = acc.charAt(0).toUpperCase() + acc.slice(1);
-      
-      let textoFinal = "";
-      if (!cie) {
-        textoFinal = `${accCap}.`;
-      } else if (cie.startsWith("¡")) {
-        textoFinal = `${accCap}. ${cie}`;
-      } else {
-        textoFinal = `${accCap} ${cie}`;
-      }
+    function generarMensaje() {
+        const s = seleccionarSinRepetir(saludos, "saludo");
+        const u = seleccionarSinRepetir(ubicaciones, "ubicacion");
+        const cap = seleccionarSinRepetir(capacidades, "capacidad");
+        const am = seleccionarSinRepetir(amenidades, "amenidades");
+        const hor = seleccionarSinRepetir(horarios, "horario");
+        const pre = seleccionarSinRepetir(precios, "precio");
+        const cie = seleccionarSinRepetir(cierres, "cierre");
+        const v = vinetas[Math.floor(Math.random() * vinetas.length)];
 
-      if (Math.random() > 0.25) {
-        return `${sal} ${textoFinal}`;
-      } else {
-        return textoFinal;
-      }
-    } else if (modoActual === 1) {
-      if (Math.random() > 0.25) {
-        return `${pick(p1Saludos)} ${pick(p1Presentacion)} ${pick(p1Preguntas)}`;
-      } else {
-        return `${pick(p1Saludos)} ${pick(p1Preguntas)}`;
-      }
-    } else {
-      const ap = pick(p2Aperturas);
-      const com = pick(p2Comodidades);
-      const tar = pick(p2Tarifas);
-      const cie = pick(p2CierresWA);
+        // Variación de estructura visual (3 formatos distintos)
+        const formato = Math.floor(Math.random() * 3);
+        let mensajeFinal = "";
 
-      const molde = Math.random();
-      if (molde < 0.35) {
-        return `${ap} ${com}\n\n${tar}\n\n${cie}`;
-      } else if (molde < 0.70) {
-        return `${ap} ${com}\n\n${tar} ${cie}`;
-      } else {
-        return `${com}\n\n${tar}\n\n${cie}`;
-      }
+        if (formato === 0) {
+            mensajeFinal = `${s} ${u}\n\n${v} ${cap}\n${v} ${am}\n${v} ${hor}\n${v} ${pre}\n\n${cie}`;
+        } else if (formato === 1) {
+            mensajeFinal = `${s}\n\n${u}\n\nDetalles de la casa:\n${v} ${cap}\n${v} ${am}\n\n${hor} ${pre}\n\n${cie}`;
+        } else {
+            mensajeFinal = `${s} ${u}\n\n${cap} ${am}\n\n${v} ${hor}\n${v} ${pre}\n\n${cie}`;
+        }
+
+        document.getElementById("mensaje").textContent = mensajeFinal;
     }
-  }
 
-  function generar() {
-    let candidata = "";
-    let intentos = 0;
+    function copiarMensaje() {
+        const texto = document.getElementById("mensaje").textContent;
+        navigator.clipboard.writeText(texto).then(() => {
+            const toast = document.getElementById("toast");
+            toast.classList.add("show");
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2000);
+        });
+    }
 
-    do {
-      candidata = construirTexto();
-      intentos++;
-    } while (historial.includes(candidata) && intentos < 50);
-
-    document.getElementById('textoGenerado').textContent = candidata;
-  }
-
-  function copiar() {
-    const texto = document.getElementById('textoGenerado').textContent;
-    historial.push(texto);
-    if (historial.length > 500) historial.shift();
-    localStorage.setItem('villa_historial_v5', JSON.stringify(historial));
-
-    navigator.clipboard.writeText(texto).then(() => {
-      document.getElementById('statusMsg').textContent = `¡Copiado! (${historial.length} únicos en memoria)`;
-      setTimeout(() => generar(), 400);
-    });
-  }
-
-  document.getElementById('statusMsg').textContent = `Historial activo: ${historial.length} textos únicos`;
-  generar();
+    window.onload = generarMensaje;
 </script>
 
 </body>
